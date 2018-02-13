@@ -40,17 +40,18 @@ public class JwtFilter extends AbstractAuthenticationProcessingFilter {
 //		String header = request.getHeader("Authorization");
 
 		String header = "Bearer Hola";
-		if (header == null || !header.startsWith("Bearer ")) {
-			throw new JwtTokenMissingException("No JWT token found in request headers");
-		}
+//		if (header == null || !header.startsWith("Bearer ")) {
+//			throw new JwtTokenMissingException("No JWT token found in request headers");
+//		}
 
 		//clave a comprobar, para pruebas solo "hola"
-		String authToken = header.substring(7);
+//		String authToken = header.substring(7);
 
 		//Implementar con interfaz Authentication.class
 		//solo necesitamos que regrese que "esta autenticado"
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority("ADMIN"));
+		
 		JwtAuthenticationToken authRequest = new JwtAuthenticationToken(authorities);
 
 		return getAuthenticationManager().authenticate(authRequest);

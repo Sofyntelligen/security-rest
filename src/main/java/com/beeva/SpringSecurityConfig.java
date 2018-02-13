@@ -16,8 +16,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	JwtEntryPoint theJwtEntryPoint;
 	
-	@Autowired
-	JwtFilter theJwtFilter;
+//	@Autowired
+//	JwtFilter theJwtFilter;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -30,7 +30,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and().antMatcher("/login").authorizeRequests().anyRequest().permitAll()
-			.and().antMatcher("/**").addFilterBefore(theJwtFilter, UsernamePasswordAuthenticationFilter.class).authorizeRequests().anyRequest().hasRole("ADMIN")
+//			.and().antMatcher("/**").addFilterBefore(theJwtFilter, UsernamePasswordAuthenticationFilter.class).authorizeRequests().anyRequest().hasRole("ADMIN")
 			.and().csrf().disable()
 				.httpBasic().authenticationEntryPoint(theJwtEntryPoint)
 				;

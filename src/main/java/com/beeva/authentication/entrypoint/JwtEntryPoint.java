@@ -1,4 +1,4 @@
-package com.beeva;
+package com.beeva.authentication.entrypoint;
 
 import java.io.IOException;
 
@@ -17,7 +17,9 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
 			throws IOException, ServletException {
 		
+		System.out.println(">>>> JWTEntryPOINT commence");
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+//		response.sendError(HttpServletResponse.SC_OK, "Unauthorized");
 
 	}
 

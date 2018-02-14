@@ -1,4 +1,4 @@
-package com.beeva;
+package com.beeva.model;
 
 public class Person {
 

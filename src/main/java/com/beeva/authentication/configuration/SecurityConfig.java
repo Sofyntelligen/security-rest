@@ -8,8 +8,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-import com.beeva.security.config.JWTAuthenticationLogin;
-import com.beeva.security.config.JWTAuthenticationToken;
+import com.beeva.authentication.JWTAuthenticationLogin;
+import com.beeva.authentication.JWTAuthenticationToken;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

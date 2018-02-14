@@ -1,5 +1,6 @@
-package com.beeva.security.config;
+package com.beeva.authentication;
 
+import com.beeva.authentication.model.JwtToken;
 import com.beeva.authentication.model.JwtUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,7 +45,7 @@ public class JWTAuthenticationLogin extends AbstractAuthenticationProcessingFilt
     protected void successfulAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                             FilterChain filterChain, Authentication authentication) {
 
-        JWTToken.generateToken(httpServletResponse, authentication);
+        JwtToken.generateToken(httpServletResponse, authentication);
 
     }
 }

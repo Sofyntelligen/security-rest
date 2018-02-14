@@ -1,8 +1,11 @@
 package com.beeva.security.config;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +34,7 @@ public class JWTToken {
         }
 
         httpServletResponse.addHeader("Authorization", "bearer : " + token);
+        httpServletResponse.addHeader("content-type", "application/json");
     }
 
     public static Authentication getToken(HttpServletRequest httpServletRequest) {
@@ -38,10 +42,15 @@ public class JWTToken {
         String token = httpServletRequest.getHeader("Authorization");
 
         if (token != null) {
-            String user = "";
+            DecodedJWT decodedJWT = null;
+            try {
+                decodedJWT = JWT.decode(token);;
+            } catch (JWTVerificationException exception){
+                //Invalid signature/claims
+            }
 
-            return user != null ?
-                    new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList()) :
+            return decodedJWT != null ?
+                    new UsernamePasswordAuthenticationToken(decodedJWT.getIssuer(), null, Collections.emptyList()) :
                     null;
         }
         return null;

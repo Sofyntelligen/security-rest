@@ -1,4 +1,4 @@
-package com.beeva;
+package com.beeva.authentication.model;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,34 +11,31 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
-	public JwtAuthenticationToken(Object principal, Object credentials,
-			Collection<? extends GrantedAuthority> authorities) {
-		super(principal, credentials, authorities);
-		// TODO Auto-generated constructor stub
-	}
-	
-	@Override
-	public Object getCredentials() {
-		// TODO Auto-generated method stub
-		return super.getCredentials();
+	private String token;
+
+	public JwtAuthenticationToken(String token) {
+		super(null, null);
+		this.token = token;
 	}
 
 	public String getToken() {
-		// TODO Metodo para regresar el token
-		return "hola";
+		return token;
 	}
 	
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	// Metodo no utilizado para esta authenticacion
+	@Override
+	public Object getPrincipal() {
+		return null;
+	}
+
+	// Metodo no utilizado para esta authenticacion
+	@Override
+	public Object getCredentials() {
+		return null;
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

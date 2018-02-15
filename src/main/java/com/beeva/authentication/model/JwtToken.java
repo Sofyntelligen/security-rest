@@ -40,16 +40,21 @@ public class JwtToken {
     public static Authentication getToken(HttpServletRequest httpServletRequest) {
 
         String token = httpServletRequest.getHeader("Authorization");
-
-        if (token != null) {
-            DecodedJWT decodedJWT = null;
+                
+        if (token != null && token.startsWith("Bearer ")) {
+            
+        	token = token.substring(6);
+        	
+        	DecodedJWT decodedJWT = null;
+            
+            
             try {
-                decodedJWT = JWT.decode(token);;
+                decodedJWT = JWT.decode(token);
             } catch (JWTVerificationException exception){
-                //Invalid signature/claims
+                throw new JWTVerificationException("Error decoding token");
             }
 
-            return decodedJWT != null ?
+            return (decodedJWT != null) ?
                     new UsernamePasswordAuthenticationToken(decodedJWT.getIssuer(), null, Collections.emptyList()) :
                     null;
         }

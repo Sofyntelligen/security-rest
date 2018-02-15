@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import com.beeva.authentication.model.JwtToken;
@@ -19,41 +17,33 @@ import com.beeva.authentication.model.JwtToken;
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
 	public JwtAuthenticationTokenFilter() {
-	super("/**");
+		super("/**");
 	}
-	
-	@Override
-    protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        return true;
-    }
 
 	@Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+	protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
+		return true;
+	}
 
-//        String header = request.getHeader("Authorization");
-//
-//        if (header == null || !header.startsWith("Bearer ")) {
-//            throw new JwtTokenMissingException("No JWT token found in request headers");
-//        }
+	@Override
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+			throws AuthenticationException {
 
+		Authentication authRequest = JwtToken.getToken(request);
 
+		//TODO validar el resultado del usuario, si el usuario no esta authenticado tirar un AuthenticationException
+		return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(
+				authRequest.getPrincipal(), null, authRequest.getAuthorities()));
+	}
 
-        Authentication authRequest = JwtToken.getToken(request);
+	@Override
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+			Authentication authResult) throws IOException, ServletException {
 
-        //sera necesario que nos regrese en 
-        return getAuthenticationManager().authenticate(
-        		new UsernamePasswordAuthenticationToken(authRequest.getPrincipal(), null, authRequest.getAuthorities()));
-    }
+		super.successfulAuthentication(request, response, chain, authResult);
 
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, 
-    		FilterChain chain, Authentication authResult)
-            throws IOException, ServletException {
-        super.successfulAuthentication(request, response, chain, authResult);
+		chain.doFilter(request, response);
 
-        chain.doFilter(request, response);
-    }
-	
-	
-	
+	}
+
 }

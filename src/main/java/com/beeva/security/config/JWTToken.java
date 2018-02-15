@@ -1,13 +1,13 @@
 package com.beeva.security.config;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -33,20 +33,20 @@ public class JWTToken {
             log.error("--- error --- " + exception.getStackTrace());
         }
 
-        httpServletResponse.addHeader("Authorization", "bearer : " + token);
-        httpServletResponse.addHeader("content-type", "application/json");
+        httpServletResponse.addHeader(HttpHeaders.AUTHORIZATION, token);
     }
 
     public static Authentication getToken(HttpServletRequest httpServletRequest) {
 
-        String token = httpServletRequest.getHeader("Authorization");
-
+        String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        token = token.replace(" ", ",");
+        token = token.substring(token.indexOf(",") + 1 , token.length());
         if (token != null) {
             DecodedJWT decodedJWT = null;
             try {
                 decodedJWT = JWT.decode(token);;
             } catch (JWTVerificationException exception){
-                //Invalid signature/claims
+                log.error("--- error --- " + exception.getStackTrace());
             }
 
             return decodedJWT != null ?

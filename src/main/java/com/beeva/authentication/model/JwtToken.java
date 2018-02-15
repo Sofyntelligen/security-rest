@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,7 +56,9 @@ public class JwtToken {
             }
 
             return (decodedJWT != null) ?
-                    new UsernamePasswordAuthenticationToken(decodedJWT.getIssuer(), null, Collections.emptyList()) :
+            		//Aquí debe devolver el nombr ede usuario que viene en el token y los roles de la base de datos
+//                    new UsernamePasswordAuthenticationToken(decodedJWT.getIssuer(), null, Collections.emptyList()) :
+            		new UsernamePasswordAuthenticationToken("josedaniel", null, AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")):
                     null;
         }
         return null;

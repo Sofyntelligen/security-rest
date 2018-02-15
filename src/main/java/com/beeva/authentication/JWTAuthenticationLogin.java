@@ -19,9 +19,9 @@ import java.util.Collections;
 
 public class JWTAuthenticationLogin extends AbstractAuthenticationProcessingFilter {
 
-    public JWTAuthenticationLogin(String url, AuthenticationManager authManager) {
+    public JWTAuthenticationLogin(String url, AuthenticationManager authenticationManager) {
         super(new AntPathRequestMatcher(url));
-        setAuthenticationManager(authManager);
+        setAuthenticationManager(authenticationManager);
     }
 
     @Override

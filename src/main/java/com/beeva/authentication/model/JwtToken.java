@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 
@@ -20,6 +21,7 @@ public class JwtToken {
 
     private static final Logger log = LoggerFactory.getLogger(JwtToken.class);
 
+    @NotNull
     public static void generateToken(HttpServletResponse httpServletResponse, Authentication authentication) {
         String token = null;
         try {
@@ -36,6 +38,7 @@ public class JwtToken {
         httpServletResponse.addHeader(HttpHeaders.AUTHORIZATION, token);
     }
 
+    @NotNull
     public static Authentication getToken(HttpServletRequest httpServletRequest) {
 
         String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
@@ -44,11 +47,10 @@ public class JwtToken {
         if (token != null) {
             DecodedJWT decodedJWT = null;
             try {
-                decodedJWT = JWT.decode(token);;
+                decodedJWT = JWT.decode(token);
             } catch (JWTVerificationException exception){
                 log.error("--- error --- " + exception.getStackTrace());
             }
-
             return decodedJWT != null ?
                     new UsernamePasswordAuthenticationToken(decodedJWT.getIssuer(), null, Collections.emptyList()) :
                     null;

@@ -8,12 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
-
-//	@Autowired
-//	DataSource thedataSource;
 
     @Autowired
 	SecurityConfigImplement securityConfigImplement;
@@ -25,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         http.authorizeRequests().antMatchers("/login").permitAll();
 
-        http.authorizeRequests().antMatchers("/**").authenticated();
+        http.authorizeRequests().antMatchers("/**").hasAnyRole("USER", "ADMIN");;
 
         http.addFilterBefore(securityConfigImplement.getJWTAuthenticationLogin("/login", authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)
@@ -48,5 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //        	.dataSource(thedataSource).withDefaultSchema()
 //        		.withUser("josedaniel2").password("beeva").roles("ADMIN");
     }
+
 
 }

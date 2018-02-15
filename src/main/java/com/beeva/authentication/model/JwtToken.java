@@ -10,12 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
 
 public class JwtToken {
 
@@ -42,17 +42,21 @@ public class JwtToken {
     public static Authentication getToken(HttpServletRequest httpServletRequest) {
 
         String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        token = token.replace(" ", ",");
-        token = token.substring(token.indexOf(",") + 1 , token.length());
-        if (token != null) {
-            DecodedJWT decodedJWT = null;
+                
+        if (token != null && token.startsWith("Bearer ")) {
+            
+        	token = token.substring(6);
+        	DecodedJWT decodedJWT = null;
+
             try {
                 decodedJWT = JWT.decode(token);
             } catch (JWTVerificationException exception){
                 log.error("--- error --- " + exception.getStackTrace());
+                throw new JWTVerificationException("Error decoding token");
             }
-            return decodedJWT != null ?
-                    new UsernamePasswordAuthenticationToken(decodedJWT.getIssuer(), null, Collections.emptyList()) :
+
+            return (decodedJWT != null) ?
+            		new UsernamePasswordAuthenticationToken("josedaniel", null, AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")):
                     null;
         }
         return null;

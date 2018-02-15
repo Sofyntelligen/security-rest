@@ -1,7 +1,7 @@
 package com.beeva.authentication;
 
 import com.beeva.authentication.model.JwtToken;
-import com.beeva.authentication.model.JwtUser;
+import com.beeva.authentication.model.JwtJSONUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +29,7 @@ public class JWTAuthenticationLogin extends AbstractAuthenticationProcessingFilt
             throws AuthenticationException, IOException {
 
         InputStream inputStream = httpServletRequest.getInputStream();
-        JwtUser user = new ObjectMapper().readValue(inputStream, JwtUser.class);
+        JwtJSONUser user = new ObjectMapper().readValue(inputStream, JwtJSONUser.class);
 
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(

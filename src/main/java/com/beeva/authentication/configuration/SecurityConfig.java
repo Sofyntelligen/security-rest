@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 
-		authenticationManagerBuilder.inMemoryAuthentication().withUser("josedaniel").password("beeva").roles("ADMIN");
+		authenticationManagerBuilder.inMemoryAuthentication().withUser("josedaniel").password("bea").roles("ADMIN");
 
 		// https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#user-schema
 		// authenticationManagerBuilder.jdbcAuthentication()

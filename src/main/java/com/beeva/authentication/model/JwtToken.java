@@ -1,4 +1,4 @@
-package com.beeva.security.config;
+package com.beeva.authentication.model;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 
-public class JWTToken {
+public class JwtToken {
 
-    private static final Logger log = LoggerFactory.getLogger(JWTToken.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtToken.class);
 
     public static void generateToken(HttpServletResponse httpServletResponse, Authentication authentication) {
         String token = null;

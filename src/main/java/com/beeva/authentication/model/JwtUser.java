@@ -1,9 +1,10 @@
-package com.beeva.model;
+package com.beeva.authentication.model;
 
-public class User {
+public class JwtUser {
 
     private String password;
     private String username;
+    //private String role;
 
     public String getPassword() {
         return password;

@@ -1,4 +1,4 @@
-package com.beeva.authentication.model;
+package com.beeva.authentication.configuration;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

@@ -1,8 +1,12 @@
-package com.beeva.authentication;
+package com.beeva.authentication.configuration;
 
-import com.beeva.authentication.model.JwtToken;
-import com.beeva.authentication.model.JwtJSONUser;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.beeva.authentication.model.JwtUser;
+import com.beeva.authentication.repository.implement.TokenImplement;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,11 +19,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 
-public class JWTAuthenticationLogin extends AbstractAuthenticationProcessingFilter {
+public class JWTAuthenticationLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    public JWTAuthenticationLogin(String url, AuthenticationManager authenticationManager) {
+    @Autowired
+    TokenImplement tokenImplement;
+
+    public JWTAuthenticationLoginFilter(String url, AuthenticationManager authenticationManager) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authenticationManager);
     }
@@ -29,7 +37,7 @@ public class JWTAuthenticationLogin extends AbstractAuthenticationProcessingFilt
             throws AuthenticationException, IOException {
 
         InputStream inputStream = httpServletRequest.getInputStream();
-        JwtJSONUser user = new ObjectMapper().readValue(inputStream, JwtJSONUser.class);
+        JwtUser user = new ObjectMapper().readValue(inputStream, JwtUser.class);
 
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -45,7 +53,13 @@ public class JWTAuthenticationLogin extends AbstractAuthenticationProcessingFilt
     protected void successfulAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                             FilterChain filterChain, Authentication authentication) {
 
-        JwtToken.generateToken(httpServletResponse, authentication);
+        try {
+
+            httpServletResponse.addHeader(HttpHeaders.AUTHORIZATION, tokenImplement.generateToken(authentication.getName(), Algorithm.HMAC256("beeva")));
+
+        } catch (UnsupportedEncodingException exception) {
+            exception.getStackTrace();
+        }
 
     }
 }

@@ -1,5 +1,6 @@
 package com.beeva.authentication.configuration;
 
+import com.beeva.authentication.repository.implement.FilterImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,23 +13,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
-	SecurityConfigImplement securityConfigImplement;
+    FilterImplement filterImplement;
 	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
-
         http.authorizeRequests().antMatchers("/login").permitAll();
-
         http.authorizeRequests().antMatchers("/**").hasAnyRole("USER", "ADMIN");;
-
-        http.addFilterBefore(securityConfigImplement.getJWTAuthenticationLogin("/login", authenticationManager()),
+        http.addFilterBefore(filterImplement.getJWTAuthenticationLogin("/login", authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(securityConfigImplement.getJWTAuthenticationToken(),
+                .addFilterBefore(filterImplement.getJWTAuthenticationToken(),
                         UsernamePasswordAuthenticationFilter.class);
-
        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
     }
 
     @Override
@@ -38,11 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .withUser("josedaniel")
                 .password("beeva")
                 .roles("ADMIN");
-        
-        // https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#user-schema
-//        authenticationManagerBuilder.jdbcAuthentication()
-//        	.dataSource(thedataSource).withDefaultSchema()
-//        		.withUser("josedaniel2").password("beeva").roles("ADMIN");
+
     }
 
 

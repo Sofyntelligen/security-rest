@@ -19,7 +19,7 @@ public class JwtAuthenticationTokenProvider extends AbstractUserDetailsAuthentic
 
     @Override
     public boolean supports(Class<?> authentication) {
-//        return (JwtAuthenticationToken.class.isAssignableFrom(authentication) );
+
     	return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
 
@@ -29,18 +29,6 @@ public class JwtAuthenticationTokenProvider extends AbstractUserDetailsAuthentic
 
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-       
-//    	JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
-//       
-//        String token = jwtAuthenticationToken.getToken();
-//
-//        User parsedUser = jwtUtil.parseToken(token);
-//
-//        if (parsedUser == null) {
-//            throw new JwtTokenMalformedException("JWT token is not valid");
-//        }
-//
-//        List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN");
 
         List authorities = new ArrayList<>(authentication.getAuthorities());
         return new JwtUserDetails(authentication.getPrincipal().toString(), null, authorities);

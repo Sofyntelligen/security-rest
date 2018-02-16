@@ -13,7 +13,7 @@ public class JwtAuthSuccessHandler implements AuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) {		
-		System.out.println("Exito en authenticacion");
+		System.out.println("Exito en authentication");
 	}
 
 }

@@ -1,9 +1,18 @@
-package com.beeva.authentication.repository;
+package com.beeva.authentication.data;
+
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.security.core.Authentication;
 
 import com.beeva.authentication.model.JwtUser;
 
-public interface UsersRepository {
+public interface UserDAO {
 
-	public JwtUser getUser (String username, String password);
+	public Optional<JwtUser> validateUser (HttpServletRequest request);
+	
+	public Optional<String> generateToken (Authentication authentication);
 	
 }

@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.beeva.authentication.JWTAuthenticationLogin;
+import com.beeva.authentication.JwtAuthenticationLogin;
 import com.beeva.authentication.JwtAuthSuccessHandler;
 import com.beeva.authentication.JwtAuthenticationTokenFilter;
 import com.beeva.authentication.JwtAuthenticationTokenProvider;
@@ -43,9 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests().antMatchers("/login").permitAll();
 
-		http.authorizeRequests().antMatchers("/**").hasAnyRole("USER", "ADMIN");
+		http.authorizeRequests().antMatchers("/**").hasAnyRole("ADMIN");
 
-		http.addFilterBefore(new JWTAuthenticationLogin("/login", authenticationManager()),
+		http.addFilterBefore(new JwtAuthenticationLogin("/login", authenticationManager()),
 				UsernamePasswordAuthenticationFilter.class)
 				.addFilterBefore(tokenFilterConfigurated(), UsernamePasswordAuthenticationFilter.class);
 

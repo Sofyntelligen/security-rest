@@ -8,13 +8,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class JwtUserDetails implements UserDetails{
 
-	private String userName;
+	private String username;
     private String token;
     private Collection<? extends GrantedAuthority> authorities;
 	
-    public JwtUserDetails(String userName, String token, List<GrantedAuthority> grantedAuthorities) {
+    public JwtUserDetails(String username, String token, List<GrantedAuthority> grantedAuthorities) {
 
-        this.userName = userName;
+        this.username = username;
         this.token= token;
         this.authorities = grantedAuthorities;
     }
@@ -33,7 +33,7 @@ public class JwtUserDetails implements UserDetails{
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return userName;
+		return username;
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class JwtUserDetails implements UserDetails{
 	}
 
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 
 	public String getToken() {

@@ -2,24 +2,20 @@ package com.beeva.authentication.model;
 
 public class JwtUser {
 
-	private String password;
 	private String username;
 	private String role;
-	
+
+	public JwtUser(String username, String role) {
+		this.username = username;
+		this.role = role;
+	}
+
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+
 	public String getRole() {
 		return role;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getUsername() {
@@ -32,6 +28,6 @@ public class JwtUser {
 
 	@Override
 	public String toString() {
-		return "User{" + "password='" + password + '\'' + ", username='" + username + '\'' + '}';
+		return "User{" + '\'' + ", username='" + username + '\'' + '}';
 	}
 }

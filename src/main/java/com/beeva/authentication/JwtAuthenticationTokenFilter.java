@@ -1,18 +1,23 @@
 package com.beeva.authentication;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
-import com.beeva.authentication.model.JwtToken;
+import com.beeva.authentication.data.UserDAO;
+import com.beeva.authentication.data.repository.JwtTokenRepository;
+import com.beeva.authentication.model.JwtUser;
 
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -29,11 +34,22 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
 
-		Authentication authRequest = JwtToken.getToken(request);
+		UserDAO theUserDao = new JwtTokenRepository();
 
-		//TODO validar el resultado del usuario, si el usuario no esta authenticado tirar un AuthenticationException
-		return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(
-				authRequest.getPrincipal(), null, authRequest.getAuthorities()));
+		System.out.println(">>>>Inicia attemptAuth");
+		Optional<JwtUser> validatedUser = theUserDao.validateUser(request);
+
+		if (validatedUser.isPresent()) {
+			return getAuthenticationManager()
+					.authenticate(new UsernamePasswordAuthenticationToken(
+							validatedUser.get().getUsername(), null,
+							AuthorityUtils.createAuthorityList(validatedUser.get().getRole())));
+		}
+		
+		throw new BadCredentialsException("Credenciales no autentificadas");
+
+		// TODO validar el resultado del usuario, si el usuario no esta autenticado
+		// tirar un AuthenticationException
 	}
 
 	@Override
@@ -42,7 +58,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
 		super.successfulAuthentication(request, response, chain, authResult);
 
-		chain.doFilter(request, response);
+//		chain.doFilter(request, response);
 
 	}
 

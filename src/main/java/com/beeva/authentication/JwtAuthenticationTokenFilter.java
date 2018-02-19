@@ -36,9 +36,9 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
 		UserDAO theUserDao = new JwtTokenRepository();
 
-		System.out.println(">>>>Inicia attemptAuth");
 		Optional<JwtUser> validatedUser = theUserDao.validateUser(request);
 
+		System.out.println(validatedUser.get());
 		if (validatedUser.isPresent()) {
 			return getAuthenticationManager()
 					.authenticate(new UsernamePasswordAuthenticationToken(
@@ -47,9 +47,6 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 		}
 		
 		throw new BadCredentialsException("Credenciales no autentificadas");
-
-		// TODO validar el resultado del usuario, si el usuario no esta autenticado
-		// tirar un AuthenticationException
 	}
 
 	@Override
@@ -58,7 +55,7 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
 
 		super.successfulAuthentication(request, response, chain, authResult);
 
-//		chain.doFilter(request, response);
+		chain.doFilter(request, response);
 
 	}
 

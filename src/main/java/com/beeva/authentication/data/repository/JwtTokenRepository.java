@@ -56,7 +56,7 @@ public class JwtTokenRepository implements UserDAO {
 
 		 return Optional.ofNullable(new JwtUser(
 		 decodedJWT.getSubject(),
-		 decodedJWT.getClaim("role").toString()));
+		 decodedJWT.getClaim("role").asString()));
  
 	}
 
